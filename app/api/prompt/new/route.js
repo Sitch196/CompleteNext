@@ -14,6 +14,6 @@ export const POST = async (req, res) => {
 
     return new Response(JSON.stringify(newPrompt, { status: 201 }));
   } catch (err) {
-    console.log(err);
+    return new Response("Something Wrong with the prompt!!");
   }
 };
