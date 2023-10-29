@@ -1,5 +1,6 @@
 import { connectToDB } from "@/utils/database";
 import Prompt from "@/models/prompt";
+
 export const POST = async (req, res) => {
   const { userId, prompt, tag } = await req.json();
 
@@ -12,8 +13,13 @@ export const POST = async (req, res) => {
     });
     await newPrompt.save();
 
-    return new Response(JSON.stringify(newPrompt, { status: 201 }));
+    // Now, fetch the newly created prompt with the populated creator field
+    const createdPrompt = await Prompt.findById(newPrompt._id).populate(
+      "creator"
+    );
+
+    return new Response(JSON.stringify(createdPrompt, { status: 201 }));
   } catch (err) {
-    return new Response("Something Wrong with the prompt!!");
+    return new Response("Something is wrong with the prompt!!");
   }
 };
